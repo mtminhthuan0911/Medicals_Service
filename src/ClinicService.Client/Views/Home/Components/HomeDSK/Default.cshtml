@@ -1,0 +1,51 @@
+﻿
+@model IEnumerable<MedicalServiceViewModel>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center mb-5 pb-2">
+            <div class="col-md-8 text-center heading-section ftco-animate">
+                <h2 class="mb-4">YourDocTor <span>Hệ Thống Khoa</span></h2>
+            </div>
+        </div>
+        <div class="row tabulation mt-4 ftco-animate">
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-fill d-block w-100">
+                    @{ int i = 0; } 
+                    @foreach (var item in Model)
+                    {
+                        <li class="nav-item text-left">
+                            <a class="nav-link @(i == 0 ? "active" : null) d-flex align-items-centere py-4" data-toggle="tab" href="#service-@item.Id">
+                                <span class="@item.Description flaticon mr-3"></span>
+                                <span>@item.Title</span>
+                            </a>
+                        </li>
+
+                        i++;
+                    }
+                </ul>
+            </div>
+
+            <div class="col-md-9">
+                <div class="tab-content pt-4 pt-md-0 pl-md-3">
+                    @{ int j = 0; }
+                    @foreach (var item in Model)
+                    {
+                        <div class="tab-pane container p-0 @(j == 0 ? "active" : "fade")" id="service-@item.Id">
+                            <div class="row">
+                                <div class="col-md-5 img" style="background-image: url(/asset/images/dept-1.jpg);"></div>
+                                <div class="col-md-7 text pl-md-4">
+                                    <h3><a href="#">@item.Title</a></h3>
+                                    @Html.Raw(item.Content)
+                                </div>
+                            </div>
+                        </div>
+
+                        j++;
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

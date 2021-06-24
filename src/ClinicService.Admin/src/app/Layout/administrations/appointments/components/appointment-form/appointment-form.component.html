@@ -1,0 +1,79 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-field">
+        <label for="appointmentDate">Chọn ngày hẹn *</label>
+        <!-- <input id="appointmentDate" type="text" pInputText formControlName="appointmentDate"> -->
+        <p-calendar showTime="true" hourFormat="24" formControlName="appointmentDate" dateFormat="dd/mm/yy">
+        </p-calendar>
+        <app-validation-messages [entityForm]="entityForm" fieldName="appointmentDate"
+            [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="medicalServiceId">Chọn dịch vụ</label>
+        <!-- <input id="medicalServiceId" type="text" pInputText formControlName="medicalServiceId"> -->
+        <p-autoComplete [suggestions]="filteredMedicalServices" (completeMethod)="filterMedicalServices($event)"
+            [dropdown]="true" field="title" formControlName="medicalServiceId">
+            <ng-template let-medicalService pTemplate="item">
+                {{medicalService.title}}
+            </ng-template>
+        </p-autoComplete>
+    </div>
+
+    <div class="p-field">
+        <label for="patientId">Chọn người hẹn *</label>
+        <!-- <input id="patientId" type="text" pInputText formControlName="patientId"> -->
+        <p-autoComplete [suggestions]="filteredPatients" (completeMethod)="filterPatients($event)" [dropdown]="true"
+            field="firstName" formControlName="patientId">
+            <ng-template let-patient pTemplate="item">
+                {{patient.lastName}} {{patient.firstName}}
+            </ng-template>
+        </p-autoComplete>
+        <app-validation-messages [entityForm]="entityForm" fieldName="patientId"
+            [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="clinicBranchId">Chọn chi nhánh khám *</label>
+        <!-- <input id="clinicBranchId" type="text" pInputText formControlName="clinicBranchId"> -->
+        <p-autoComplete [suggestions]="filteredClinicBranches" (completeMethod)="filterClinicBranches($event)"
+            [dropdown]="true" field="name" formControlName="clinicBranchId">
+            <ng-template let-clinicBranch pTemplate="item">
+                {{clinicBranch.name}}
+            </ng-template>
+        </p-autoComplete>
+        <app-validation-messages [entityForm]="entityForm" fieldName="clinicBranchId"
+            [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="note">Ghi chú</label>
+        <textarea id="note" pInputTextarea formControlName="note"></textarea>
+    </div>
+
+    <hr>
+
+    <div class="p-field">
+        <label for="guessFullName">Tên người hẹn (Nếu không có tài khoản)</label>
+        <input id="guessFullName" type="text" pInputText formControlName="guessFullName">
+    </div>
+
+    <div class="p-field">
+        <label for="guessPhoneNumber">Số điện thoại (Nếu không có tài khoản)</label>
+        <input id="guessPhoneNumber" type="text" pInputText formControlName="guessPhoneNumber">
+    </div>
+
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

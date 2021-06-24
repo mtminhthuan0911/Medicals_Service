@@ -1,0 +1,155 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model IEnumerable<ReappointmentViewModel>
+@{
+    string patientId = ViewBag.PatientId as string;
+    string serverPath = Configuration.GetValue<string>("ServerPath");
+    var token = "";
+    @if (User.HasClaim(h => h.Type == "access_token"))
+    {
+        token = @User.Claims.SingleOrDefault(s => s.Type == "access_token").Value;
+    }
+}
+
+<input type="hidden" value="@patientId" name="patient-id" />
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/asset/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a asp-controller="Home" asp-action="Index">Trang chủ <i class="fa fa-chevron-right"></i></a></span></p>
+                <h1 class="mb-3 bread">Lịch Tái Khám</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section-padding">
+    <div class="container1">
+        <div class="row">
+            <div class="vertical-menu">
+                @await Html.PartialAsync("_LeftNavigation", 3)
+            </div>
+            <div class="col-lg-9 col-md-12">
+                <div class="row">
+                    <section class="ftco-section1 ftco-no-pt ftco-no-pb ftco-services-2 bg-light">
+                        <div class="row">
+                            <div class="col-75">
+                                <div class="containerck">
+                                    <form action="/action_page.php">
+                                        <div class="row">
+                                            <div class="col-50">
+                                                <h1 style="color: dodgerblue;text-align: center;"><b> Danh Sách Lịch Tái Khám </b></h1>
+                                                <hr>
+                                                <div id="appointment-temp"></div>
+                                                @if (Model != null && Model.Count() > 0)
+                                                {
+                                                    foreach (var item in Model)
+                                                    {
+                                                        <p>
+                                                            <b>Lịch tái khám:</b>
+                                                            @item.ReappointmentDate.ToString("dd/MM/yyyy HH:mm:ss")
+                                                        </p>
+                                                        <p>
+                                                            <b>Ghi chú:</b>
+                                                            @item.Note
+                                                        </p>
+                                                        <p>
+                                                            <b>Ngày lập phiếu:</b>
+                                                            @item.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")
+                                                        </p>
+                                                        <p>
+                                                            <b>Tình trạng phiếu:</b>
+                                                            @item.StatusCategoryName
+                                                        </p>
+                                                        <p>
+                                                            <b>Mã phiếu kết quả trước:</b>
+                                                            <span>@item.FromMedicalExaminationId</span>
+                                                            <a asp-controller="KetQuaKhamBenh" asp-action="ChiTiet" asp-route-id="@item.FromMedicalExaminationId">
+                                                                Xem kết quả trước
+                                                            </a>
+                                                        </p>
+                                                        <hr />
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-muted">Không có dữ liệu hiển thị.</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="col-25">
+                                @await Component.InvokeAsync("PatientInfo")
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        const token = '@token';
+        const patientId = $('input[name="patient-id"]').val();
+
+        $(document).ready(() => {
+            loadAppointmentClient();
+        });
+
+        function loadAppointmentClient() {
+            let appointmentClient = JSON.parse(localStorage.getItem('appointment-client'));
+            if (appointmentClient) {
+                $('#appointment-temp').html(`
+                    <h4><b>Phiếu hẹn khám (Tạm)</b></h4>
+                    <p>
+                        <b>Lịch khám:</b>
+                        ${appointmentClient.appointmentDate}
+                    </p>
+                    <p>
+                        <b>Ghi chú:</b>
+                        ${appointmentClient.note}
+                    </p>
+                    <p>
+                        <b>Ngày lập phiếu:</b>
+                        ${appointmentClient.createdDate}
+                    </p>
+                    <p>
+                        <b>Chi nhánh hẹn khám:</b>
+                        ${appointmentClient.clinicBranchId}
+                    </p>
+                    <p>
+                        <b>Tình trạng phiếu:</b>
+                        ${appointmentClient.statusCategoryId}
+                    </p>
+                    <hr />
+                `);
+
+                if(patientId)
+                    updatePatientInfo(appointmentClient.id, patientId)
+            }
+        }
+
+        function updatePatientInfo(appointmentId, patientId) {
+            $.ajax({
+                url: '@serverPath/api/appointments/' + appointmentId + '/update-patient-id/' + patientId,
+                type: 'PUT',
+                headers: { Authorization: 'Bearer ' + token },
+                success: res => {
+                    console.log('Cập nhật thành công!');
+                    localStorage.removeItem('appointment-client');
+                },
+                error: err => {
+                    console.log(err);
+                }
+            })
+        }
+    </script>
+}

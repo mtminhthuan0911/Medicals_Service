@@ -1,0 +1,64 @@
+<h2 class="text-muted">NHÓM QUYỀN <small>Danh sách</small></h2>
+<p-panel #pnlPermissions>
+    <p-header>
+        <div class="row">
+            <div class="col">
+                <p-dropdown [options]="roleOptions" [(ngModel)]="selectedRole" styleClass="w-100" optionLabel="name"
+                    (onChange)="onChangeRole($event)">
+                </p-dropdown>
+            </div>
+            <div class="col text-right">
+                <button appPermission appFunction="SYSTEM_ROLE" appAction="UPDATE" pButton type="button"
+                    icon="pi pi-save" label="Lưu" class="mr-2" (click)="onSavePermissions()"></button>
+            </div>
+        </div>
+    </p-header>
+    <p-treeTable [value]="permissionScreen" selectionMode="single" [(selection)]="selectedPermission"
+        [resizableColumns]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Chức năng</th>
+                <th>XEM</th>
+                <th>THÊM MỚI</th>
+                <th>CẬP NHẬT</th>
+                <th>XOÁ</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr>
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                    {{rowData.name}}
+                </td>
+                <td>
+                    <ng-container *ngIf="rowData.hasViewed">
+                        <p-checkbox [(ngModel)]="selectedViews" [value]="rowData.id"
+                            (onChange)="onChangeCommand($event, 'READ', rowData.id, rowData.parentId)"></p-checkbox>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container *ngIf="rowData.hasCreated">
+                        <p-checkbox [(ngModel)]="selectedCreates" [value]="rowData.id"
+                            (onChange)="onChangeCommand($event, 'CREATE', rowData.id, rowData.parentId)"></p-checkbox>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container *ngIf="rowData.hasUpdated">
+                        <p-checkbox [(ngModel)]="selectedUpdates" [value]="rowData.id"
+                            (onChange)="onChangeCommand($event, 'UPDATE', rowData.id, rowData.parentId)"></p-checkbox>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container *ngIf="rowData.hasDeleted">
+                        <p-checkbox [(ngModel)]="selectedDeletes" [value]="rowData.id"
+                            (onChange)="onChangeCommand($event, 'DELETE', rowData.id, rowData.parentId)"></p-checkbox>
+                    </ng-container>
+                </td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</p-panel>
+<p-blockUI [blocked]="blockedPanel" [target]="pnlPermissions">
+    <p-progressSpinner [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+    </p-progressSpinner>
+</p-blockUI>

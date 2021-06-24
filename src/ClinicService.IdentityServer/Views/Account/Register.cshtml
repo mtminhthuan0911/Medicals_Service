@@ -1,0 +1,80 @@
+﻿@model RegisterInputModel
+
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="/asset/images/favicon (2).ico">
+    <title>YourDocTor - Provide Health 	</title>
+    <title>Đăng ký</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="~/css/StyleDangNhap.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row px-3">
+            <div class="col-lg-10 col-xl-9 card flex-row mx-auto px-0">
+                <div class="img-leftDN d-none d-md-flex"></div>
+
+                <div class="card-body">
+                    <h4 class="title text-center mt-4">
+                        Đăng Ký Tài Khoản
+                    </h4>
+                    <partial name="_ValidationSummary" />
+                    <form asp-route="Register" class="form-box px-3">
+                        <div class="form-input">
+                            <span><i class="fa fa-envelope-o"></i></span>
+                            <input asp-for="UserName" placeholder="Tên đăng nhập (Bắt buộc)">
+                        </div>
+                        <div class="form-input">
+                            <span><i class="fa fa-key"></i></span>
+                            <input type="password" asp-for="Password" placeholder="Mật khẩu (Bắt buộc)" autocomplete="off">
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-input">
+                                    <span><i class="fa fa-key"></i></span>
+                                    <input asp-for="LastName" placeholder="Họ (Bắt buộc)">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-input">
+                                    <span><i class="fa fa-key"></i></span>
+                                    <input asp-for="FirstName" placeholder="Tên (Bắt buộc)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-input">
+                            <span><i class="fa fa-key"></i></span>
+                            <input asp-for="Email" placeholder="Email (Bắt buộc)">
+                        </div>
+
+                        <div class="form-input">
+                            <span><i class="fa fa-key"></i></span>
+                            <input asp-for="PhoneNumber" placeholder="Số điện thoại">
+                        </div>
+
+                        <div class="mb-3 d-flex">
+                            <button name="button" value="register" class="btn btn-block btn-primary mr-2">Đăng Ký</button>
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-block btn-secondary mt-0">Quay về</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.slim.js"></script>
+    <script>
+        $(document).ready(() => {
+            
+        });
+    </script>
+</body>
+</html>

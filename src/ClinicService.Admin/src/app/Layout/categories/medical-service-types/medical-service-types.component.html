@@ -1,0 +1,64 @@
+<h2 class="text-muted">LOẠI DỊCH VỤ <small>Danh sách</small></h2>
+<p-panel #pnlMedicalServiceTypes>
+    <p-header>
+        <div class="row">
+            <div class="col">
+                <button appPermission appFunction="CATEGORY_MEDICAL_SERVICE_TYPE" appAction="CREATE" pButton type="button"
+                    icon="pi pi-plus" label="Thêm" class="mr-2" (click)="onShowAddedModal()"></button>
+                <button appPermission appFunction="CATEGORY_MEDICAL_SERVICE_TYPE" appAction="UPDATE" pButton type="button"
+                    icon="pi pi-pencil" label="Sửa" class="ui-button-warning mr-2"
+                    (click)="onShowEditedModal()"></button>
+                <button appPermission appFunction="CATEGORY_MEDICAL_SERVICE_TYPE" appAction="DELETE" pButton type="button"
+                    icon="pi pi-trash" label="Xoá" class="ui-button-danger" (click)="onConfirmDelete()"></button>
+            </div>
+            <div class="col">
+                <input type="text" pInputText placeholder="Tìm kiếm..." (keyup.enter)="loadData()" [(ngModel)]="q"
+                    class="w-100">
+            </div>
+        </div>
+    </p-header>
+    <p-table [value]="items" selectionMode="single" [(selection)]="selectedItem" [responsive]="true"
+        [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 64px;" class="text-center">
+                    Chọn
+                </th>
+                <th>Tên loại dịch vụ</th>
+                <th>Icon</th>
+                <th>Thứ tự</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr [pSelectableRow]="row">
+                <td style="width: 64px;" class="text-center">
+                    <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                </td>
+                <td>{{row.name}}</td>
+                <td>{{row.icon}}</td>
+                <td>{{row.sortOrder}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <p>
+                Tổng số bản ghi: {{totalRecords | number}}
+            </p>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td class="text-center">
+                    Không tìm thấy kết quả!
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-footer>
+        <p-paginator [rows]="limit" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10,50,100]"
+            (onPageChange)="onPageChanged($event)"></p-paginator>
+        <p-blockUI [blocked]="blockedPanel" [target]="pnlMedicalServiceTypes">
+            <p-progressSpinner
+                [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+            </p-progressSpinner>
+        </p-blockUI>
+    </p-footer>
+</p-panel>

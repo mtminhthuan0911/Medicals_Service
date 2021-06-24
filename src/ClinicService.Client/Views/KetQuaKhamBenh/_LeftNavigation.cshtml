@@ -1,0 +1,5 @@
+﻿@model int 
+
+<a asp-controller="KetQuaKhamBenh" asp-action="Index" class="@(Model == 1 ? "active" : null)"><i class="fa fa-notes-medical"></i> Xem Kết Quả</a>
+<a asp-controller="KetQuaKhamBenh" asp-action="LichKham" class="@(Model == 2 ? "active" : null)"><i class="fa fa-check-square-o"></i> Lịch Hẹn Khám</a>
+<a asp-controller="KetQuaKhamBenh" asp-action="LichTaiKham" class="@(Model == 3 ? "active" : null)"><i class="fa fa-refresh"></i> Lịch Tái Khám</a>

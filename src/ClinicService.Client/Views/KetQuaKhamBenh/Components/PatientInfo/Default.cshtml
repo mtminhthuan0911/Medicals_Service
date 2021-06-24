@@ -1,0 +1,16 @@
+﻿@model UserViewModel
+
+@if (!string.IsNullOrEmpty(Model.Id))
+{
+    <div class="containerck1">
+        <h4 style="color: black;"><b> Thông tin Khách Hàng</b></h4>
+        <p><i class="fa fa-id-badge"></i> ID Khách Hàng : @Model.Id </p>
+        <p><i class="fa fa-user"></i> Tên Khách Hàng : @Model.LastName @Model.FirstName </p>
+        <p><i class="fa fa-phone"></i> SDT : @Model.PhoneNumber </p>
+        <p><i class="fa fa-envelope"></i> Email : @Model.Email </p>
+    </div>
+}
+else
+{
+    <p class="text-muted">Vui lòng đăng nhập để xem thông tin cá nhân.</p>
+}

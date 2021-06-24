@@ -1,0 +1,111 @@
+﻿@model MedicalExaminationViewModel
+@{
+    int detailIndex = 1;
+    int prescriptionIndex = 1;
+}
+
+<div class="container">
+    <a asp-action="Index" class="btn btn-lg btn-secondary mb-3">Quay về</a>
+
+    @if (Model != null)
+    {
+        <div class="card mb-4">
+            <h5 class="card-header">Thông tin phiếu kết quả</h5>
+            <div class="card-body">
+                <h5 class="card-title">Mã phiếu kết quả: <b class="text-danger">@Model.Id</b></h5>
+                <p class="card-text">
+                    <b>Họ tên:</b>
+                    @Model.PatientFullName
+                </p>
+                <p>
+                    <b>Ngày tạo:</b>
+                    @Model.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss")
+                </p>
+                @if (Model.ModifiedDate.HasValue)
+                {
+                    <p>
+                        <b>Chỉnh sửa cuối vào:</b>
+                        @Model.ModifiedDate.Value.ToString("dd/MM/yyyy hh:mm:ss")
+                    </p>
+                }
+            </div>
+        </div>
+        <div class="card mb-4">
+            <h5 class="card-header">Danh sách chuẩn đoán</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Chuẩn đoán</th>
+                        <th scope="col">Điều trị</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Details)
+                    {
+                        <tr>
+                            <th scope="row">@{detailIndex++;}</th>
+                            <td>@item.Diagnostic</td>
+                            <td>@item.Treatment</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card mb-4">
+            <h5 class="card-header">Toa đơn thuốc</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tên thuốc</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Cách dùng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Prescriptions)
+                    {
+                        <tr>
+                            <th scope="row">@{prescriptionIndex++;}</th>
+                            <td>
+                                @item.Name
+                                <small class="text-muted">@item.Subname</small>
+                            </td>
+                            <td>
+                                @item.Total
+                                <span class="font-style-italic">@item.Quantity</span>
+                            </td>
+                            <td>
+                                <p>
+                                    - Uống các buổi:
+                                    @if (item.IsMorning == true)
+                                    {
+                                        <span>Sáng,</span>
+                                    }
+                                    @if (item.IsAfternoon == true)
+                                    {
+                                        <span>Chiều,</span>
+                                    }
+                                    @if (item.IsEvening == true)
+                                    {
+                                        <span>Tối,</span>
+                                    }
+                                </p>
+                                <p>
+                                    - Mỗi buổi uống: @item.Take @item.AvailableQuantity
+                                </p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-danger font-weight-bold">
+            @ViewBag.AccessDeniedMessage
+        </p>
+    }
+</div>

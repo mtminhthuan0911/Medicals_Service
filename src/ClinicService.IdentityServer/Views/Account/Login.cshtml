@@ -1,0 +1,99 @@
+﻿@model LoginViewModel
+
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="/asset/images/favicon (2).ico">
+    <title>YourDocTor - Provide Health 	</title>
+    <title>Đăng Nhập</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="~/css/StyleDangNhap.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css">
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row px-3">
+            <div class="col-lg-10 col-xl-9 card flex-row mx-auto px-0">
+                <div class="img-leftDN d-none d-md-flex"></div>
+
+                <div class="card-body">
+                    <h4 class="title text-center mt-4">
+                        Đăng Nhập Tài Khoản
+                    </h4>
+                    <partial name="_ValidationSummary" />
+                    <form asp-route="Login" method="post" class="form-box">
+                        <input type="hidden" asp-for="ReturnUrl" />
+
+                        <div class="form-input">
+                            <span><i class="fa fa-envelope-o"></i></span>
+                            <input asp-for="Username" placeholder="Tên đăng nhập" autofocus>
+                        </div>
+                        <div class="form-input">
+                            <span><i class="fa fa-key"></i></span>
+                            <input type="password" asp-for="Password" placeholder="Mật khẩu" autocomplete="off">
+                        </div>
+
+                        @if (Model.AllowRememberLogin)
+                        {
+                            <div class="mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="cb1" asp-for="RememberLogin">
+                                    <label class="custom-control-label" for="cb1" asp-for="RememberLogin">Ghi nhớ?</label>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="mb-3 d-flex">
+                            <button name="button" value="login" class="btn btn-block btn-primary mr-2">Đăng Nhập</button>
+                            <button name="button" value="cancel" class="btn btn-block btn-secondary mt-0">Quay về</button>
+                        </div>
+                    </form>
+
+                    <div class="text-right">
+                        <a asp-action="ForgotPassword" asp-controller="Account" class="forget-link">
+                            Quên Mật Khẩu ?
+                        </a>
+                    </div>
+
+                    @if (Model.VisibleExternalProviders.Any())
+                    {
+                        <div class="text-center mb-3">
+                            Đăng Nhập Khác
+                        </div>
+
+                        <div class="row mb-3">
+                            @foreach (var provider in Model.VisibleExternalProviders)
+                            {
+                                <div class="col-4">
+                                    <a asp-controller="External"
+                                        asp-action="Challenge"
+                                        asp-route-scheme="@provider.AuthenticationScheme"
+                                        asp-route-returnUrl="@Model.ReturnUrl"
+                                        class="btn btn-block btn-social">
+                                        @provider.DisplayName
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        }
+
+                    <hr class="my-4">
+
+                    <div class="text-center mb-2">
+                        Bạn Chưa có Tài Khoản ?
+                        <a asp-controller="Account" asp-action="Register" class="register-link">
+                            Đăng Ký ở Đây
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.slim.js"></script>
+</body>
+</html>

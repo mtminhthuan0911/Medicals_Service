@@ -1,0 +1,61 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-field">
+        <label for="id">Mã phương thức *</label>
+        <input id="id" type="text" pInputText formControlName="id">
+        <app-validation-messages [entityForm]="entityForm" fieldName="id" [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="name">Tên phương thức *</label>
+        <input id="name" type="text" pInputText formControlName="name">
+        <app-validation-messages [entityForm]="entityForm" fieldName="name" [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="sortOrder">Thứ tự</label>
+        <input id="sortOrder" type="text" pInputText formControlName="sortOrder">
+    </div>
+
+    <div class="p-field">
+        <p-fileUpload [showUploadButton]="false" [showCancelButton]="false" (onRemove)="removeAttachments($event)"
+            (onSelect)="selectAttachments($event)" multiple="multiple" accept="image/*" maxFileSize="1000000">
+        </p-fileUpload>
+        <p-table [value]="attachments" styleClass="mt-3">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Tên file</th>
+                    <th>Đuôi</th>
+                    <th>Dung lượng</th>
+                    <th>Thao tác</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-file>
+                <tr>
+                    <td><img src="{{serverPath + file.filePath}}" class="w-25" /></td>
+                    <td>{{file.fileName}}</td>
+                    <td>{{file.fileType}}</td>
+                    <td>{{file.fileSize}}</td>
+                    <td>
+                        <button pButton type="button" icon="pi pi-trash" class="ui-button-danger mr-2"
+                            (click)="deleteAttachment(file.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

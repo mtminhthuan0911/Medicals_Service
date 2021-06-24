@@ -1,0 +1,149 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model IEnumerable<MedicalExaminationViewModel>
+
+@{
+    var serverPath = Configuration.GetValue<string>("ServerPath");
+    var token = "";
+    @if (User.HasClaim(h => h.Type == "access_token"))
+    {
+        token = @User.Claims.SingleOrDefault(s => s.Type == "access_token").Value;
+    }
+}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/asset/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a asp-controller="Home" asp-action="Index">Trang chủ <i class="fa fa-chevron-right"></i></a></span></p>
+                <h1 class="mb-3 bread">Kết Quả Khám Bệnh</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section-padding">
+    <div class="container1">
+        <div class="row">
+            <div class="vertical-menu">
+                @await Html.PartialAsync("_LeftNavigation",1) 
+            </div>
+            <div class="col-lg-9 col-md-12">
+                <div class="row">
+                    <section class="ftco-section1 ftco-no-pt ftco-no-pb ftco-services-2 bg-light">
+                        <div class="row">
+                            <div class="col-75">
+                                <div class="containerck">
+                                    <div class="row">
+                                        <div class="col-50">
+                                            <h1 style="color: dodgerblue;text-align: center;"><b> Kết Quả </b></h1> <hr>
+                                            @if (Model != null)
+                                            {
+                                                foreach (var item in Model)
+                                                {
+                                                    <p>
+                                                        <a href="#">
+                                                            <b>
+                                                                Kết quả khám ngày:
+                                                                @item.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")
+                                                            </b>
+                                                        </a>
+                                                    </p>
+                                                    <p>
+                                                        <b>Ngày chỉnh sửa kết quả gần nhất:</b>
+                                                        @if (item.ModifiedDate.HasValue)
+                                                        {
+                                                            @(item.ModifiedDate.Value.ToString("dd/MM/yyyy HH:mm:ss"))
+                                                        }
+                                                    </p>
+                                                    <p>
+                                                        <b>Tình trạng phiếu:</b>
+                                                        @item.StatusCategoryName
+                                                    </p>
+                                                    <a asp-controller="KetQuaKhamBenh" asp-action="ChiTiet" asp-route-id="@item.Id"
+                                                       class="btn btn-warning">Xem chi tiết kết quả</a>
+                                                    <hr />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p class="text-muted">Không có kết quả nào.</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-25">
+                                <div class="containerck1">
+                                    @await Component.InvokeAsync("PatientInfo")
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODAL XEM CHI TIẾT -->
+<div class="modal fade" id="modal-detail" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detail-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="table-detail" class="table table-hover table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Chuẩn đoán</th>
+                            <th scope="col">Điều trị</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL XEM TOA THUỐC -->
+<div class="modal fade" id="modal-prescription" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="prescription-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="table-prescription" class="table table-hover table-sm">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Tên thuốc</th>
+                            <th scope="col">Số lượng dùng</th>
+                            <th scope="col">Cách uống</th>
+                            <th>Buổi uống</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

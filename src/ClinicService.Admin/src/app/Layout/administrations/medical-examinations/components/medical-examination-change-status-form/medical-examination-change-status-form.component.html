@@ -1,0 +1,19 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-field">
+        <label for="statusCategoryId">Chọn tình trạng *</label>
+        <p-dropdown [options]="groupedStatusCategories" appendTo="body" [group]="true"
+            [filter]="true" filterBy="label" required="true" formControlName="statusCategoryId"></p-dropdown>
+    </div>
+
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

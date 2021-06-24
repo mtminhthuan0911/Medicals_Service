@@ -1,0 +1,49 @@
+<p-panel #pnlDetail *ngIf="patient">
+    <p-header>
+        <button appPermission appFunction="PERSONNEL_PATIENT" appAction="READ" pButton type="button"
+            icon="pi pi-chevron-left" label="Quay về" class="ui-button-secondary mr-2" (click)="goBack()"></button>
+    </p-header>
+    <p>
+        <b>Họ tên:</b>
+        {{patient.lastName}} {{patient.firstName}}
+    </p>
+    <p>
+        <b>Số điện thoại:</b>
+        {{patient.phoneNumber}}
+    </p>
+    <p>
+        <b>Email:</b>
+        {{patient.email}}
+    </p>
+</p-panel>
+<hr>
+<h4>Danh sách kết quả khám bệnh</h4>
+<p-table [value]="medicalExaminations">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Ngày tạo</th>
+            <th>Mã phiếu hẹn</th>
+            <th>Mã phiếu tái khám</th>
+            <th>...</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+        <tr>
+            <td>{{row.createdDate | date: 'dd/MM/yyyy hh:mm'}}</td>
+            <td>{{row.appointmentId}}</td>
+            <td>{{row.reappointmentId}}</td>
+            <td>
+                <button pButton type="button" appFunction="PERSONNEL_PATIENT" appAction="READ" icon="pi pi-eye"
+                        pTooltip="Xem kết quả chi tiết" tooltipPosition="top" class="ui-button-warning"
+                        (click)="goToPatientMedicalExaminatilDetail(row.id)"></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td class="text-center">
+                Không tìm thấy kết quả!
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

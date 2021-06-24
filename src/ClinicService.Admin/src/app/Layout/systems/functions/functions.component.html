@@ -1,0 +1,50 @@
+<h2 class="text-muted">NHÓM QUYỀN <small>Danh sách</small></h2>
+<p-panel #pnlFunctions>
+    <p-header>
+        <div class="row">
+            <div class="col">
+                <button appPermission appFunction="SYSTEM_FUNCTION" appAction="CREATE" pButton type="button"
+                    icon="pi pi-plus" label="Thêm" class="mr-2" (click)="onShowAddedModal()"></button>
+                <button appPermission appFunction="SYSTEM_FUNCTION" appAction="UPDATE" pButton type="button"
+                    icon="pi pi-pencil" label="Sửa" class="ui-button-warning mr-2"
+                    (click)="onShowEditedModal()"></button>
+                <button appPermission appFunction="SYSTEM_FUNCTION" appAction="DELETE" pButton type="button"
+                    icon="pi pi-trash" label="Xoá" class="ui-button-danger" (click)="onConfirmDelete()"></button>
+            </div>
+        </div>
+    </p-header>
+    <p-treeTable [value]="items" selectionMode="single" [(selection)]="selectedItem" [resizableColumns]="true"
+        (onNodeSelect)="onNodeSelect($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Mã chức năng</th>
+                <th>Tên chức năng</th>
+                <th>Đường dẫn</th>
+                <th>Biểu tượng</th>
+                <th>Thứ tự</th>
+                <th>Thao tác</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr [ttSelectableRow]="rowNode">
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                    {{rowData.id}}
+                </td>
+                <td>{{rowData.name}}</td>
+                <td>{{rowData.url}}</td>
+                <td>{{rowData.icon}}</td>
+                <td>{{rowData.sortOrder}}</td>
+                <td>
+                    <button appPermission appFunction="SYSTEM_FUNCTION" appAction="CREATE" pButton type="button"
+                        label="Gán lệnh" class="ui-button-danger"
+                        (click)="onShowCommandsAssignModal(rowData.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</p-panel>
+<p-blockUI [blocked]="blockedPanel" [target]="pnlFunctions">
+    <p-progressSpinner [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+    </p-progressSpinner>
+</p-blockUI>

@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Từ chối truy cập";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="/asset/images/favicon (2).ico">
+    <title>YourDocTor - Provide Health 	</title>
+    <title>Đăng Nhập</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="~/asset/css/StyleDangNhap.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://kit.fontawesome.com/7d65f38fc8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row px-3">
+            <div class="col-lg-10 col-xl-9 card flex-row mx-auto px-0">
+                <div class="img-leftDN d-none d-md-flex"></div>
+
+                <div class="card-body">
+                    <h4 class="title text-center mt-4">
+                        BẠN KHÔNG ĐƯỢC PHÉP TRUY CẬP
+                    </h4>
+                    <p id="timeUp" class="text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let time = 5;
+
+        $(document).ready(() => {
+            setInterval(() => {
+                if (time == 0)
+                    window.location = '/';
+
+                $('timeUp').html('Quay lại trang chủ sau ' + time);
+
+                time--;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+﻿@model IEnumerable<NavigationViewModel>
+
+@{
+    var returnUrl = Context.Request.Path.Value + Context.Request.QueryString.Value;
+
+    void RenderChildHtml(NavigationViewModel child)
+    {
+        <a href="@child.Item.SeoAlias">
+            <i class="fas @child.Item.Name"></i>
+            @Html.Raw(child.Item.Content)
+        </a>
+    }
+}
+
+<div class="header">
+    <nav class="navbar navbar-expand-xl navbar-basic" id="ftco-navbar">
+        <a class="logo_img" asp-controller="Home" asp-action="Index">
+            <img class="logoweb" src="/asset/images/logo.jpg" width="250" alt="">
+            <b>
+                <span>
+                </span>
+            </b>
+        </a>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            @*<ul class="navbar-nav m-auto" id="Myactive">
+            @foreach (var nav in Model)
+            {
+                if (nav.Children == null)
+                {
+                    <li class="nav-item">
+                        <a href="@nav.Item.SeoAlias">
+                            <button class="button">
+                                <i class="fa @nav.Item.Name "></i>
+                                @Html.Raw(nav.Item.Content)
+                            </button>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a href="@nav.Item.SeoAlias">
+                                <button class="dropbtn">
+                                    <i class="fa @nav.Item.Name"></i>
+                                    @Html.Raw(nav.Item.Content)
+                                </button>
+                            </a>
+                            <div class="dropdown-content">
+                                @foreach (var navChild in nav.Children)
+                                {
+                                    RenderChildHtml(navChild);
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>*@
+            <ul class="navbar-nav m-auto" id="Myactive">
+                @foreach (var nav in Model)
+                {
+                    if (nav.Children == null)
+                    {
+                        <li class="nav-item">
+                            <a href="@nav.Item.SeoAlias">
+                                <button class="button">
+                                    <i class="fas @nav.Item.Name "></i>@Html.Raw(nav.Item.Content)
+                                </button>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a href="@nav.Item.SeoAlias">
+                                    <button class="dropbtn">
+                                        <i class="fas @nav.Item.Name"></i>
+                                        @Html.Raw(nav.Item.Content)
+                                    </button>
+                                </a>
+                                <div class="dropdown-content">
+                                    @foreach (var navChild in nav.Children)
+                                    {
+                                        RenderChildHtml(navChild);
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+
+            @*@if (User.Identity.IsAuthenticated)
+        {
+            <div class="btn-group">
+                <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @User.Identity.Name
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a asp-controller="TaiKhoan" asp-action="ThongTinCaNhan" class="dropdown-item">
+                        Thông tin cá nhân
+                    </a>
+                    <a asp-controller="KetQuaKhamBenh" asp-action="LichKham" class="dropdown-item">
+                        Lịch hẹn khám
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="TaiKhoan" asp-action="DangXuat" class="dropdown-item">
+                        Đăng Xuất
+                    </a>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <a asp-controller="TaiKhoan" asp-action="DangNhap" asp-route-returnUrl="@returnUrl">
+                <button class="btn-login">
+                    <span style="color: aliceblue;">
+                        Đăng Nhập
+                    </span>
+                </button>
+            </a>
+        }*@
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="dropdown-login">
+                    <button class="button-login" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i> @User.Identity.Name
+                    </button>
+                    <div class="drop-content">
+                        <a asp-controller="TaiKhoan" asp-action="ThongTinCaNhan" class="dropdown-item">
+                            <i class="fas fa-user"></i> Thông tin cá nhân
+                        </a>
+                        <a asp-controller="KetQuaKhamBenh" asp-action="LichKham" class="dropdown-item">
+                            <i class="fas fa-calendar"></i> Lịch hẹn khám
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a asp-controller="TaiKhoan" asp-action="DangXuat" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Đăng Xuất
+                        </a>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <a asp-controller="TaiKhoan" asp-action="DangNhap" asp-route-returnUrl="@returnUrl">
+                    <button class="btn-login">
+                        <span style="color: aliceblue;">
+                            Đăng Nhập
+                        </span>
+                    </button>
+                </a>
+            }
+
+
+        </div>
+    </nav>
+</div>

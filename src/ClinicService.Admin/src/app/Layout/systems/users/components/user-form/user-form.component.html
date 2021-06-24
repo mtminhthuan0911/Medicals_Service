@@ -1,0 +1,70 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="userName">Tên đăng nhập *</label>
+            <input id="userName" type="text" pInputText formControlName="userName">
+            <app-validation-messages [entityForm]="entityForm" fieldName="userName"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="email">Email *</label>
+            <input id="email" type="text" pInputText formControlName="email">
+            <app-validation-messages [entityForm]="entityForm" fieldName="email"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="lastName">Họ *</label>
+            <input id="lastName" type="text" pInputText formControlName="lastName">
+            <app-validation-messages [entityForm]="entityForm" fieldName="lastName"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="firstName">Tên *</label>
+            <input id="firstName" type="text" pInputText formControlName="firstName">
+            <app-validation-messages [entityForm]="entityForm" fieldName="firstName"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="dateOfBirth">Ngày sinh</label>
+            <p-calendar id="dateOfBirth" showIcon="true" formControlName="dateOfBirth" dateFormat="dd/mm/yy"
+                monthNavigator="true" yearNavigator="true" yearRange="1900:2030"></p-calendar>
+            <app-validation-messages [entityForm]="entityForm" fieldName="dateOfBirth"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-4 py-0">
+            <label for="phoneNumber">Số điện thoại</label>
+            <input id="phoneNumber" type="text" pInputText formControlName="phoneNumber">
+            <app-validation-messages [entityForm]="entityForm" fieldName="phoneNumber"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="address">Địa chỉ</label>
+            <input id="address" type="text" pInputText formControlName="address">
+            <app-validation-messages [entityForm]="entityForm" fieldName="address"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

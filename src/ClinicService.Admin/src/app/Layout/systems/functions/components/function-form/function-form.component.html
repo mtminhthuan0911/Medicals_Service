@@ -1,0 +1,52 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="id">Mã chức năng</label>
+            <input id="id" type="text" pInputText formControlName="id">
+        </div>
+        <div class="p-field p-col">
+            <label for="name">Tên chức năng *</label>
+            <input id="name" type="text" pInputText formControlName="name">
+            <app-validation-messages [entityForm]="entityForm" fieldName="name" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="url">Url *</label>
+            <input id="url" type="text" pInputText formControlName="url">
+            <app-validation-messages [entityForm]="entityForm" fieldName="url" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="sortOrder">SortOrder *</label>
+            <input id="sortOrder" type="text" pInputText formControlName="sortOrder">
+            <app-validation-messages [entityForm]="entityForm" fieldName="sortOrder" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="parentId">ParentId</label>
+            <input id="parentId" type="text" pInputText formControlName="parentId">
+            <app-validation-messages [entityForm]="entityForm" fieldName="parentId" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="icon">Icon</label>
+            <input id="icon" type="text" pInputText formControlName="icon">
+            <app-validation-messages [entityForm]="entityForm" fieldName="icon" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+    
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

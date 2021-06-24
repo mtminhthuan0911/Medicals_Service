@@ -1,0 +1,185 @@
+﻿@using System.Security.Claims
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model HomeFrmThongTinViewModel
+
+@{
+    var loggedUserId = User.FindFirst(ClaimTypes.NameIdentifier) != null ? User.FindFirst(ClaimTypes.NameIdentifier).Value : "0";
+    var serverPath = Configuration.GetValue<string>("ServerPath");
+}
+
+@if (Model != null)
+{
+    <section class="ftco-section ftco-no-pt ftco-no-pb ftco-services-2 bg-light">
+        <div class="container">
+            <div class="row d-flex">
+                <div class="col-md-7 py-5">
+                    <div class="py-lg-5">
+                        <div class="row justify-content-center pb-5 mb-3">
+                            <div class="col-md-12 heading-section ftco-animate">
+                                @Html.Raw(Model.Parent.Content)
+                            </div>
+                        </div>
+                        <div class="row">
+                            @foreach (var item in Model.Children)
+                            {
+                                <div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
+                                    <div class="media block-6 services d-flex">
+                                        <div class="icon justify-content-center align-items-center d-flex"><span class="@item.SeoAlias"></span></div>
+                                        <div class="media-body pl-md-4">
+                                            <h3 class="heading mb-3">@item.Name</h3>
+                                            @Html.Raw(item.Content)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!--  form phieu Đặt Hẹn       -->
+                <div class="col-md-5 d-flex">
+                    <div class="appointment-wrap p-4 p-lg-5 d-flex align-items-center">
+                        <form id="appointment-form" class="appointment-form ftco-animate">
+                            <input type="hidden" name="patient-id" value="@loggedUserId" />
+
+                            <h3>  PHIẾU Đặt Hẹn </h3>
+                            <div class="">
+                                <div class="form-group">
+                                    <input type="text" name="last-name" class="form-control" placeholder="Họ (Bắt buộc)" pattern="[a-z]{1,15}" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="first-name" class="form-control" placeholder="Tên (Bắt buộc)" pattern="[a-z]{1,15}" required>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="form-group">
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
+                                            <select name="clinic-branch-id" class="form-control">
+                                                @foreach (var item in Model.ClinicBranches)
+                                                {
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" id="phone-number" class="form-control" placeholder="SDT" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="form-group">
+                                    <div class="input-wrap">
+                                        <div class="icon"><span class="fa fa-calendar"></span></div>
+                                        <input name="appointment-date" type="text" class="form-control appointment_date (Bắt buộc)" placeholder="Ngày">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-wrap">
+                                        <div class="icon"><span class="fa fa-clock-o"></span></div>
+                                        <input name="appointment-time" type="text" class="form-control appointment_time (Bắt buộc)" placeholder="Thời Gian">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="form-group">
+                                    <textarea name="note" cols="30" rows="2" class="form-control" placeholder="Ghi Chú"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <center>
+                                        <button type="button" class="btn-phieuthongtin align-items-center" onclick="submitForm()">
+                                            <span>
+                                                Đặt Lịch hẹn
+                                            </span>
+                                        </button>
+                                    </center>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    @await Html.PartialAsync("~/Views/Shared/_NotFound.cshtml")
+}
+
+<script>
+    const appointmentClientKey = 'appointment-client';
+
+    function submitForm() {
+        const appointmentClient = localStorage.getItem(appointmentClientKey);
+        if (appointmentClient) {
+            let appointmentDate = new Date(JSON.parse(appointmentClient).appointmentDate);
+            let now = new Date();
+
+            if (appointmentDate.getTime() > now.getTime()) {
+                let year = appointmentDate.getFullYear();
+                let month = appointmentDate.getMonth() + 1;
+                let dateOfMonth = appointmentDate.getDate();
+                let hours = appointmentDate.getHours();
+                let minutes = appointmentDate.getMinutes();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Bạn đã đặt lịch hẹn vào lúc: ' + dateOfMonth + '/' + month + '/' + year + ' ' + hours + ':' + minutes
+                });
+
+                return;
+            }
+        }
+
+        let appointmentDate = $('input[name="appointment-date"]').val().split('/');
+        let appointmentTime = $('input[name="appointment-time"]').val().split(':');
+        let appointmentDateFormat = new Date(parseInt(appointmentDate[2]), parseInt(appointmentDate[1]) - 1, parseInt(appointmentDate[0]), parseInt(appointmentTime[0]), parseInt(appointmentTime[1]));
+        let fullName = $('input[name="last-name"]').val() + ' ' + $('input[name="first-name"]').val();
+        let patientId = $('input[name="patient-id"]').val();
+
+        if (appointmentDate.length == 0 || appointmentTime.length == 0 || fullName.length == 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Vui lòng nhập đầy đủ thông tin!'
+            })
+            return;
+        }
+
+        const $form = $('#appointment-form');
+        const data = {
+            appointmentDate: appointmentDateFormat,
+            note: $('textarea[name="note"]').val(),
+            medicalServiceId: 0,
+            patientId: patientId,
+            statusCategoryId: 'STATUS_RECEIVED',
+            clinicBranchId: $('select[name="clinic-branch-id"]').val(),
+            guessFullName: fullName,
+            guessPhoneNumber: $('#phone-number').val()
+        }
+
+        $.ajax({
+            url: '@serverPath/api/appointments',
+            type: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (res, status) => {
+                if (status == 'success') {
+                    Swal.fire('Đặt lịch hẹn thành công!');
+                    if (patientId === null || patientId === undefined || patientId == 0)
+                        localStorage.setItem(appointmentClientKey, JSON.stringify(res));
+                }
+            },
+            error: (xhr, status, error) => {
+                if (status == 'error')
+                    Swal.fire({
+                        icon: 'error',
+                        title: xhr.responseJSON.message
+                    });
+            }
+        });
+    }
+</script>

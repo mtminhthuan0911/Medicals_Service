@@ -1,0 +1,150 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model MedicalServiceViewModel
+
+@{
+    var imageUrl = Model.Attachments != null && Model.Attachments.Count() > 0 ? string.Format("{0}/{1}", Configuration.GetValue<string>("ServerPath"), Model.Attachments.FirstOrDefault().FilePath) : "/asset/images/image_1.jpg";
+}
+
+@*Background - Page - Service*@
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/asset/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs">
+                    <span class="mr-2">
+                        <a asp-controller="Home" asp-action="Index">Trang chủ <i class="fa fa-chevron-right"></i></a>
+                    </span>
+                    <a asp-controller="DichVu" asp-action="Index">
+                        <span class="mr-2">Dịch VỤ <i class="fa fa-chevron-right"></i></span>
+                    </a>
+                    <span class="mr-2"></span>
+                </p>
+                <h1 class="mb-3 bread">@Model.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+@*Content*@
+<section id="about" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <section class="section-card">
+                    <div class="img-thumb wow fadeInLeft" data-wow-delay="0.3s">
+                        <div class="card">
+                            <img src="@imageUrl"
+                                 alt="@(Model.Attachments != null && Model.Attachments.Count() > 0 ? Model.Attachments.FirstOrDefault().FileName : null)"
+                                 style="width:100%">
+                            <h3 style="text-align: center;"><b><i class="fas fa-briefcase-medical"></i> @Model.Title</b></h3>
+                            <h4 style="text-align: center;"><i><i class="fas fa-coins"></i>@string.Format("{0:n0} đ", Model.Cost)</i></h4>
+                            <section>
+                                <center>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-controller="DatLichHen" asp-action="Index" asp-route-medicalServiceId="@Model.Id">
+                                            <button class="btn-group-info-datlich">Đặt Lịch Hẹn</button>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="TaiKhoan" asp-action="DangNhap" asp-route-returnUrl="/DatLichHen?medicalServiceId=@Model.Id">
+                                            <button class="btn-group-info-datlich" style="background-color: gray">Đăng nhập để đặt hẹn</button>
+                                        </a>
+                                    }
+                                    <a asp-controller="Home" asp-action="LienHe"><button class="btn-group-info-contac">Liên Hệ Với Chúng Tôi</button></a>
+                                </center>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="profile-wrapper wow fadeInRight" data-wow-delay="0.3s">
+                    @Html.Raw(Model.Content)
+                </div>
+            </div>
+            <section class="ftco-intro img" style="background-image: url(/asset/images/bg_3.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="card-title">
+                        <div class="col-md-7">
+                        </div>
+                        <div class="container">
+                            <div class="row justify-content-center pb-3">
+                                <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                                    <span class="subheading">YourDocTor</span>
+                                    <h2 class="mb-4">Dịch Vụ Liên Quan</h2>
+                                </div>
+                            </div>
+                            <div class="row ftco-animate justify-content-center">
+                                <div class="col-md-12">
+                                    <div class="carousel-testimony owl-carousel ftco-owl">
+                                        <div class="card">
+                                            <a href="">
+                                                <img src="/asset/images/doc-5.jpg" alt="Avatar" style="width:100%">
+                                                <div class="container">
+                                                    <center>
+                                                        <h4><b>Gói Sức Khỏe Tổng Quát</b></h4>
+                                                        <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                                    </center>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="card">
+                                            <a href="">
+                                                <img src="/asset/images/doc-3.jpg" alt="Avatar" style="width:100%">
+                                                <div class="container">
+                                                    <center>
+                                                        <h4><b>Gói Sức Khỏe Cơ Bản</b></h4>
+                                                        <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                                    </center>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="card">
+                                            <a href="">
+                                                <img src="/asset/images/doc-4.jpg" alt="Avatar" style="width:100%">
+                                                <div class="container">
+                                                    <center>
+                                                        <h4><b>Gói Xét Nghiệm Gan</b></h4>
+                                                        <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                                    </center>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="card">
+                                            <a href="">
+                                                <img src="/asset/images/doc-2.jpg" alt="Avatar" style="width:100%">
+                                                <div class="container">
+                                                    <center>
+                                                        <h4><b>Gói Chăm Sóc Tại Nhà</b></h4>
+                                                        <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                                    </center>
+
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="card">
+                                            <a href="">
+                                                <img src="/asset/images/doc-1.jpg" alt="Avatar" style="width:100%">
+                                                <div class="container">
+                                                    <center>
+                                                        <h4><b>Sức Khỏe Và Sắc Đẹp</b></h4>
+                                                        <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                                    </center>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</section>

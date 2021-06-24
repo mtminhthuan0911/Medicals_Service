@@ -1,0 +1,11 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    var webClientUrl = Configuration.GetValue<string>("WebClientUrl");
+}
+
+<h2>Vui lòng kích hoạt tài khoản trong email của bạn!</h2>
+<a href="@webClientUrl" class="btn btn-primary">Về trang chủ</a>
+
+

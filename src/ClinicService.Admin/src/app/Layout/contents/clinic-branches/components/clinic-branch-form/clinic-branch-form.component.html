@@ -1,0 +1,34 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-field">
+        <label for="name">Tên chi nhánh *</label>
+        <input id="name" type="text" pInputText formControlName="name">
+        <app-validation-messages [entityForm]="entityForm" fieldName="name" [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="address">Địa chỉ *</label>
+        <input id="address" type="text" pInputText formControlName="address">
+        <app-validation-messages [entityForm]="entityForm" fieldName="address" [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="p-field">
+        <label for="phoneNumber">Điện thoại *</label>
+        <input id="phoneNumber" type="text" pInputText formControlName="phoneNumber">
+        <app-validation-messages [entityForm]="entityForm" fieldName="phoneNumber" [validationMessages]="VALIDATION_MESSAGES">
+        </app-validation-messages>
+    </div>
+
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

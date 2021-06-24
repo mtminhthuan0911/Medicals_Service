@@ -1,0 +1,83 @@
+﻿
+@model (string greeting, string name)
+
+<section class="ftco-intro img" style="background-image: url(asset/images/bg_3.jpg);">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="card-title">
+            <div class="col-md-7">
+            </div>
+            <div class="container">
+                <div class="row justify-content-center pb-3">
+                    <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                        <span class="subheading">YourDocTor</span>
+                        <h2 class="mb-4">Dịch Vụ Phổ Biến</h2>
+                    </div>
+                </div>
+                <div class="row ftco-animate justify-content-center">
+                    <div class="col-md-12">
+                        <div class="carousel-testimony owl-carousel ftco-owl">
+                            <div class="card">
+                                <a asp-controller="DichVu" asp-action="DichVuChiTiet">
+                                    <img src="~/asset/images/doc-5.jpg" alt="Avatar" style="width:100%">
+                                    <div class="container">
+                                        <center>
+                                            <h4><b>Gói Sức Khỏe Tổng Quát</b></h4>
+                                            <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                        </center>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="card">
+                                <a asp-controller="DichVu" asp-action="DichVuChiTiet">
+                                    <img src="~/asset/images/doc-3.jpg" alt="Avatar" style="width:100%">
+                                    <div class="container">
+                                        <center>
+                                            <h4><b>Gói Sức Khỏe Cơ Bản</b></h4>
+                                            <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                        </center>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="card">
+                                <a asp-controller="DichVu" asp-action="DichVuChiTiet">
+                                    <img src="~/asset/images/doc-4.jpg" alt="Avatar" style="width:100%">
+                                    <div class="container">
+                                        <center>
+                                            <h4><b>Gói Xét Nghiệm Gan</b></h4>
+                                            <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                        </center>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="card">
+                                <a asp-controller="DichVu" asp-action="DichVuChiTiet">
+                                    <img src="~/asset/images/doc-2.jpg" alt="Avatar" style="width:100%">
+                                    <div class="container">
+                                        <center>
+                                            <h4><b>Gói Chăm Sóc Tại Nhà</b></h4>
+                                            <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                        </center>
+
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="card">
+                                <a asp-controller="DichVu" asp-action="DichVuChiTiet">
+                                    <img src="~/asset/images/doc-1.jpg" alt="Avatar" style="width:100%">
+                                    <div class="container">
+                                        <center>
+                                            <h4><b>Sức Khỏe Và Sắc Đẹp</b></h4>
+                                            <h5 style="color: black;">1.490.000 VNĐ</h5>
+                                        </center>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

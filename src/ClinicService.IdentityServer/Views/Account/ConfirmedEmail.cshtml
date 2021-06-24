@@ -1,0 +1,14 @@
+﻿@{
+    string messageUserNotFound = ViewBag.MessageUserNotFound as string;
+    string message = ViewBag.Message as string;
+}
+
+@if(!string.IsNullOrEmpty(messageUserNotFound))
+{
+    <h3 class="text-danger">@messageUserNotFound</h3>
+}
+
+@if(!string.IsNullOrEmpty(message))
+{
+    <h2 class="text-success">@message</h2>
+}

@@ -1,0 +1,105 @@
+﻿@using ClinicService.Client.Constants
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model IEnumerable<MedicalServiceViewModel>
+
+@{
+    ViewData["Title"] = "Dịch vụ";
+    var medicalServiceTypes = ViewBag.MedicalServiceTypes as IEnumerable<MedicalServiceTypeViewModel>;
+    var currentMedicalServiceTypeId = Context.Request.Query["medicalServiceTypeId"].FirstOrDefault();
+    currentMedicalServiceTypeId = !string.IsNullOrEmpty(currentMedicalServiceTypeId) ? currentMedicalServiceTypeId : SystemsConstant.MedicalServiceType.TYPE_PHOBIEN;
+}
+@*Background - Page - Service*@
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/asset/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs">
+                    <span class="mr-2">
+                        <a asp-controller="Home" asp-action="Index">Home <i class="fa fa-chevron-right"></i></a>
+                    </span>
+                    <span>Dịch Vụ <i class="fa fa-chevron-right"></i></span>
+                </p>
+                <h1 class="mb-3 bread">@medicalServiceTypes.SingleOrDefault(s => s.Id == currentMedicalServiceTypeId).Name</h1>
+            </div>
+        </div>
+    </div>
+</section>
+@*Menu - Service - "Horizontal"*@
+<center>
+    <div class="row mt-5">
+        <div class="col text-center">
+            <div class="block-27">
+                <ul>
+                    @foreach (var item in medicalServiceTypes)
+                    {
+                        <li class="@(currentMedicalServiceTypeId == item.Id ? "active" : "btn-catology1")">
+                            <a asp-controller="DichVu" asp-action="Index" asp-route-medicalServiceTypeId="@item.Id">
+                                <span>
+                                    <i class="fas @item.Icon"></i>
+                                    @item.Name
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</center>
+@*Menu - Service - "Vertical"*@
+<section class="ftco-section bg-light">
+    <div class="container1">
+        <div class="row">
+            <div class="vertical-menu">
+                @foreach (var item in medicalServiceTypes)
+                {
+                    <a asp-controller="DichVu" asp-action="Index" asp-route-medicalServiceTypeId="@item.Id" class="@(currentMedicalServiceTypeId == item.Id ? "active" : null)">
+                        <i class="fas @item.Icon"></i>
+                        @item.Name
+                    </a>
+                }
+            </div>
+            <div class="col-lg-9 col-md-12">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            var imageUrl = item.Attachments != null && item.Attachments.Count() > 0 ? string.Format("{0}/{1}", Configuration.GetValue<string>("ServerPath"), item.Attachments.FirstOrDefault().FilePath) : "/asset/images/image_1.jpg";
+
+                            <div class="col-lg-4 ftco-animate">
+                                <div class="blog-entry">
+                                    <a asp-action="ChiTiet" asp-controller="DichVu" asp-route-id="@item.Id" class="block-20" style="background-image: url('@imageUrl');">
+                                    </a>
+                                    <div class="d-flex">
+                                        <div class="meta pt-3 text-right pr-2">
+                                            <div><a href="#"><span class="fa fa-calendar mr-2"></span>Aug. 12, 2020</a></div>
+                                            <div><a href="#"><span class="fa fa-user mr-2"></span>Admin</a></div>
+                                            <div><a href="#" class="meta-chat"><span class="fa fa-comment mr-2"></span> 3</a></div>
+                                        </div>
+                                        <div class="text d-block">
+                                            <h3 class="heading">
+                                                <a asp-controller="DichVu" asp-action="ChiTiet" asp-route-id="@item.Id">@item.Title</a>
+                                            </h3>
+                                            <p></p>
+                                            <h4><span style="color:black;">@string.Format("{0:n0} đ", item.Cost)</span></h4>
+                                            <a asp-controller="DichVu" asp-action="ChiTiet" asp-route-id="@item.Id">
+                                                <button class="btn-phieuthongtin">Chi tiết</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        @await Html.PartialAsync("~/Views/Shared/_NotFound.cshtml")
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

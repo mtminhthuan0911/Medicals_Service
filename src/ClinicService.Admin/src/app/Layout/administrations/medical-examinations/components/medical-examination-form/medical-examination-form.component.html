@@ -1,0 +1,176 @@
+<button type="button" pButton icon="pi pi-angle-left" label="Trở về" class="ui-button-secondary mb-4"
+    (click)="goBack()"></button>
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="patientId">Chọn bệnh nhân *</label>
+            <p-autoComplete [suggestions]="filteredPatients" (completeMethod)="filterPatients($event)" [dropdown]="true"
+                field="firstName" formControlName="patientId">
+                <ng-template let-patient pTemplate="item">
+                    {{patient.lastName}} {{patient.firstName}}
+                </ng-template>
+            </p-autoComplete>
+            <app-validation-messages [entityForm]="entityForm" fieldName="patientId"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+        <div class="p-field p-col">
+            <label for="appointmentId">Chọn mã phiếu hẹn</label>
+            <p-autoComplete [suggestions]="filteredAppointments" (completeMethod)="filterAppointments($event)"
+                field="id" [dropdown]="true" formControlName="appointmentId">
+                <ng-template let-appointment pTemplate="item">
+                    <p>
+                        <b>Mã phiếu hẹn: <span class="text-danger">{{appointment.id}}</span></b>
+                        <br>
+                        <small class="text-muted">Tên bệnh nhân: {{appointment.patientFullName}}
+                            - Ngày hẹn: {{appointment.appointmentDate | date: 'dd/MM/yyyy hh:mm'}}
+                        </small>
+                    </p>
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="p-field p-col">
+            <label for="reappointmentId">Chọn mã phiếu tái khám</label>
+            <p-autoComplete [suggestions]="filteredReappointments"
+                (completeMethod)="filterReappointments($event)" [dropdown]="true" field="id"
+                formControlName="reappointmentId">
+                <ng-template let-beforeReappointment pTemplate="item">
+                    <p>
+                        <b>Mã phiếu hẹn: <span class="text-danger">{{beforeReappointment.id}}</span></b>
+                        <br>
+                        <small class="text-muted">Tên bệnh nhân: {{beforeReappointment.patientFullName}}
+                            - Ngày hẹn: {{beforeReappointment.reappointmentDate | date: 'dd/MM/yyyy hh:mm'}}
+                        </small>
+                    </p>
+                </ng-template>
+            </p-autoComplete>
+        </div>
+    </div>
+</form>
+
+<p-panel header="Danh sách chuẩn đoán">
+    <button type="button" pButton icon="pi pi-plus" label="Thêm" class="mb-2 mr-2"
+        (click)="onShowAddedDetailModal()"></button>
+    <button type="button" pButton icon="pi pi-pencil" label="Sửa" class="ui-button-warning mr-2"
+        (click)="onShowEditedDetailModal()"></button>
+    <button type="button" pButton icon="pi pi-trash" label="Xoá" class="ui-button-danger"
+        (click)="onConfirmDeleteDetail()"></button>
+
+    <p-table [value]="details" selectionMode="single" [(selection)]="selectedDetail" [responsive]="true"
+        [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 64px;" class="text-center">
+                    Chọn
+                </th>
+                <th>Chuẩn đoán</th>
+                <th>Điều trị</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr [pSelectableRow]="row">
+                <td style="width: 64px;" class="text-center">
+                    <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                </td>
+                <td>{{row.diagnostic}}</td>
+                <td>{{row.treatment}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td class="text-center" colspan="3">
+                    Không tìm thấy kết quả!
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-panel>
+
+<p-panel styleClass="mt-3" header="Kê toa đơn thuốc">
+    <button type="button" pButton icon="pi pi-plus" label="Thêm" class="mb-2 mr-2"
+        (click)="onShowAddedPrescriptionModal()"></button>
+    <button type="button" pButton icon="pi pi-pencil" label="Sửa" class="ui-button-warning mr-2"
+        (click)="onShowEditedPrescriptionModal()"></button>
+    <button type="button" pButton icon="pi pi-trash" label="Xoá" class="ui-button-danger"
+        (click)="onConfirmDeletePrescription()"></button>
+
+    <p-table [value]="prescriptions" selectionMode="single" [(selection)]="selectedPrescription" [responsive]="true"
+        [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 64px;" class="text-center">
+                    Chọn
+                </th>
+                <th>Thông tin thuốc</th>
+                <th>Thông tin đơn vị</th>
+                <th>Tổng cộng</th>
+                <th>Một lần uống</th>
+                <th>Sáng</th>
+                <th>Chiều</th>
+                <th>Tối</th>
+                <th>Ghi chú</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr [pSelectableRow]="row">
+                <td style="width: 64px;" class="text-center">
+                    <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                </td>
+                <td>Tên thuốc: {{row.name}} <br> Tên phụ thuốc: {{row.subname}}</td>
+                <td>Đơn vị: {{row.quantity}} <br> Đơn vị uống: {{row.availableQuantity}}</td>
+                <td>{{row.total}}</td>
+                <td>{{row.take}}</td>
+                <td>{{row.isMorning}}</td>
+                <td>{{row.isAfternoon}}</td>
+                <td>{{row.isEvening}}</td>
+                <td>{{row.note}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td class="text-center" colspan="9">
+                    Không tìm thấy kết quả!
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-panel>
+
+<p-fileUpload [showUploadButton]="false" [showCancelButton]="false" (onRemove)="removeAttachments($event)"
+    (onSelect)="selectAttachments($event)" multiple="multiple" accept="image/*" maxFileSize="1000000" styleClass="mt-3">
+</p-fileUpload>
+<p-table [value]="attachments" styleClass="mt-3">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Hình ảnh</th>
+            <th>Tên file</th>
+            <th>Đuôi</th>
+            <th>Dung lượng</th>
+            <th>Thao tác</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-file>
+        <tr>
+            <td><img src="{{serverPath + file.filePath}}" class="w-25" /></td>
+            <td>{{file.fileName}}</td>
+            <td>{{file.fileType}}</td>
+            <td>{{file.fileSize}}</td>
+            <td>
+                <button pButton type="button" icon="pi pi-trash" class="ui-button-danger mr-2"
+                    (click)="deleteAttachment(file.id)"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<div class="p-grid mt-3">
+    <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="p-col mr-2" (click)="saveData()"></button>
+    <button pButton type="button" icon="pi pi-check" label="Xác nhận và hẹn tái khám" class="p-col mr-2" (click)="saveData(true)"></button>
+    <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="p-col ui-button-secondary"
+        (click)="goBack()"></button>
+</div>
+
+<p-blockUI [blocked]="blockedPanel">
+    <p-progressSpinner [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+    </p-progressSpinner>
+</p-blockUI>

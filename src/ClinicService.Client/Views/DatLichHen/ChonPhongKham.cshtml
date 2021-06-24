@@ -1,0 +1,105 @@
+﻿@model string
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    var medicalService = ViewBag.MedicalService as MedicalServiceViewModel;
+    var medicalServiceFileUrl = medicalService.Attachments != null && medicalService.Attachments.Count() > 0 ? Configuration.GetValue<string>("ServerPath") + medicalService.Attachments.FirstOrDefault().FilePath : "/asset/images/image_1.jpg";
+    var clinicBranches = ViewBag.ClinicBranches as IEnumerable<ClinicBranchViewModel>;
+}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/asset/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs">
+                    <span class="mr-2">
+                        <a asp-controller="Home" asp-action="Index">Trang chủ <i class="fa fa-chevron-right"></i></a>
+                    </span>
+                    <span class="mr-2">
+                        <a asp-controller="DichVu" asp-action="Index">Dịch vụ <i class="fa fa-chevron-right"></i></a>
+                    </span>
+                </p>
+                <h1 class="mb-3 bread">Chọn Phòng Khám</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <section class="section-card">
+                    <div class="img-thumb wow fadeInLeft" data-wow-delay="0.3s">
+                        <div class="card">
+                            <img src="@medicalServiceFileUrl" alt="Denim Jeans" style="width:100%">
+                            <h3 style="text-align: center;"><b><i class="fas fa-briefcase-medical"></i> @medicalService.Title</b></h3>
+                            <h4 style="text-align: center;"><i><i class="fas fa-coins"></i> @string.Format("{0:n0} d0", medicalService.Cost) </i></h4>
+                            <section>
+                                <center>
+                                    <a asp-controller="DichVu" asp-action="Index" asp-route-medicalServiceId="@medicalService.Id">
+                                        <button class="btn-login"><span><i class="fas fa-undo-alt"></i> Trở Về</span></button>
+                                    </a>
+                                    <a asp-controller="DichVu" asp-action="Index">
+                                        <button class="btn-login"><span><i class="fas fa-briefcase-medical"></i> Dịch Vụ</span></button>
+                                    </a>
+                                </center>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="profile-wrapper wow fadeInRight" data-wow-delay="0.3s">
+                    <div class="progress" style="height: 15px;">
+                        <div class="progress-bar" role="progressbar" style="width: 55%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <ul class="container">
+                        <i class="far fa-address-card" style="color: royalblue;">  Điền Thông Tin</i>
+                        <i class="far fa-address-card" style="padding-left: 50px;color: royalblue;"><b>  Chọn phòng khám </b> </i>
+                        <i class="far fa-address-card" style="padding-left: 50px;color: royalblue;">  Thanh Toán </i>
+                    </ul>
+                </div>
+                <section class="ftco-section ftco-no-pt ftco-no-pb ftco-services-2 bg-light">
+                    <form asp-controller="DatLichHen" asp-action="PostChonPhongKham" method="post" id="chose-clinic-branch-form">
+                        @foreach (var item in clinicBranches)
+                        {
+                            <div class="col-xl-6 clinic-item-inner">
+                                <label class="container_checkmark">
+                                    @*<img src="/asset/images/hoahao.png" width="150px" />*@
+                                    <ul class="ml-0" style="list-style-type: none;">
+                                        <li><b>@item.Name</b></li>
+                                        <li>&emsp;<small><i class="fas fa-address-card"></i> @item.Address</small></li>
+                                        <li>&emsp;<small><i class="fas fa-phone"></i> @item.PhoneNumber</small></li>
+                                    </ul>
+
+                                    <input type="radio" value="@item.Id" name="clinicBranchId">
+                                    <span class="checkmark mt-2"></span>
+                                </label>
+                            </div>
+                        }
+                    </form>
+
+                    <div class="container1">
+                        <a asp-controller="DatLichHen" asp-action="Index" asp-route-medicalServiceId="@medicalService.Id">
+                            <button class="btn-login">Trở Về</button>
+                        </a>
+                        <a onclick="submitForm()">
+                            <button class="btn-login">Tiếp Tục</button>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>const $form = $('#chose-clinic-branch-form');
+
+        function submitForm() {
+            $form.submit();
+        }</script>
+}

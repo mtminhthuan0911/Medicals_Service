@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+    <a class="navbar-brand" href="#">Hệ thống dịch vụ phòng khám</a>
+    <button (click)="toggleSidebar()" class="navbar-toggler" type="button">
+        <!-- <span class="navbar-toggler-icon"></span> -->
+        <i aria-hidden="true" class="fa fa-bars text-muted"></i>
+    </button>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown" ngbDropdown>
+                <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
+                    <i class="fa fa-bell"></i>
+                    <b class="caret"></b>
+                    <span class="notification-circle-danger"
+                        *ngIf="lendingBaseQuantityComingLate !== undefined || waitedLendingBaseQuantityComing > 0"></span>
+                </a>
+                <div class="dropdown-menu-right" ngbDropdownMenu>
+                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)"
+                        *ngIf="lendingBaseQuantityComingLate !== undefined && lendingBaseQuantityComingLate.expirationDateComing > 0"
+                        [routerLink]="'/contents/lending-bases'">
+                        Mượn tới hạn
+                        <span class="badge badge-warning">{{lendingBaseQuantityComingLate.expirationDateComing}}</span>
+                    </a>
+                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)"
+                        *ngIf="lendingBaseQuantityComingLate !== undefined && lendingBaseQuantityComingLate.expirationDateLate > 0"
+                        [routerLink]="'/contents/lending-bases'">
+                        Mượn trễ hạn
+                        <span class="badge badge-danger">{{lendingBaseQuantityComingLate.expirationDateLate}}</span>
+                    </a>
+                    <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:void(0)"
+                        *ngIf="waitedLendingBaseQuantityComing > 0">
+                        Chờ mượn
+                        <span class="badge badge-warning">{{waitedLendingBaseQuantityComing}}</span>
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item dropdown" ngbDropdown>
+                <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
+                    <i class="fa fa-user"></i> {{userName}} <b class="caret"></b>
+                </a>
+                <div class="dropdown-menu-right" ngbDropdownMenu>
+                    <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="fa fa-fw fa-user"></i>
+                        Thông tin cá nhân
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0)" (click)="onShowChangePasswordModal()">
+                        <i class="fa fa-fw fa-user"></i>
+                        Đổi mật khẩu
+                    </a>
+                    <a (click)="onLoggedOut()" [routerLink]="['/login']" class="dropdown-item">
+                        <i class="fa fa-fw fa-power-off"></i>
+                        Đăng xuất
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

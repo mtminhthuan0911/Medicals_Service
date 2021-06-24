@@ -1,0 +1,84 @@
+<form novalidate class="ui-fluid" [formGroup]="entityForm">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="name">Tên thuốc *</label>
+            <input type="text" id="name" pInputText formControlName="name">
+            <app-validation-messages [entityForm]="entityForm" fieldName="name" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    
+        <div class="p-field p-col">
+            <label for="subname">Tên phụ *</label>
+            <input type="text" id="subname" pInputText formControlName="subname">
+            <app-validation-messages [entityForm]="entityForm" fieldName="subname"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="quantity">Đơn vị *</label>
+            <input type="text" id="quantity" pInputText formControlName="quantity">
+            <app-validation-messages [entityForm]="entityForm" fieldName="quantity" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    
+        <div class="p-field p-col">
+            <label for="availableQuantity">Đơn vị uống *</label>
+            <input type="text" id="availableQuantity" pInputText formControlName="availableQuantity">
+            <app-validation-messages [entityForm]="entityForm" fieldName="availableQuantity"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+            <label for="total">Tổng cộng *</label>
+            <input type="text" id="total" pInputText formControlName="total">
+            <app-validation-messages [entityForm]="entityForm" fieldName="total" [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+    
+        <div class="p-field p-col">
+            <label for="take">Một lần uống *</label>
+            <input type="text" id="take" pInputText formControlName="take">
+            <app-validation-messages [entityForm]="entityForm" fieldName="take"
+                [validationMessages]="VALIDATION_MESSAGES">
+            </app-validation-messages>
+        </div>
+
+        <div class="p-field-checkbox p-col justify-content-center">
+            <p-checkbox [formControl]="entityForm.controls['isMorning']" [binary]="true" inputId="isMorning"></p-checkbox>
+            <label for="isMorning">Sáng</label>
+        </div>
+    
+        <div class="p-field-checkbox p-col justify-content-center">
+            <p-checkbox [formControl]="entityForm.controls['isAfternoon']" [binary]="true" inputId="isAfternoon"></p-checkbox>
+            <label for="isAfternoon">Chiều</label>
+        </div>
+
+        <div class="p-field-checkbox p-col justify-content-center">
+            <p-checkbox [formControl]="entityForm.controls['isEvening']" [binary]="true" inputId="isEvening"></p-checkbox>
+            <label for="isEvening">Tối</label>
+        </div>
+    </div>
+
+    <div class="p-field">
+        <label for="note">Ghi chú</label>
+        <input type="text" id="note" pInputText formControlName="note">
+    </div>
+
+    <div class="d-flex">
+        <button pButton type="button" icon="pi pi-check" label="Xác nhận" class="mr-2" (click)="saveData()"></button>
+        <button pButton type="button" icon="pi pi-times" label="Huỷ bỏ" class="ui-button-secondary"
+            (click)="ref.close()"></button>
+    </div>
+
+    <p-blockUI [blocked]="blockedPanel">
+        <p-progressSpinner
+            [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+        </p-progressSpinner>
+    </p-blockUI>
+</form>

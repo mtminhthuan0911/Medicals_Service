@@ -1,0 +1,72 @@
+<ng-template [ngIf]="item != null">
+    <p>
+        <b>Ngày tạo</b>
+        {{item.createdDate | date: 'dd/MM/yyyy hh:mm'}}
+    </p>
+    <p>
+        <b>Tên bệnh nhân:</b>
+        {{item.patientFullName}}
+    </p>
+    <p>
+        <b>Tình trạng:</b>
+        {{item.statusCategoryName}}
+    </p>
+    <hr>
+    <h4>Danh sách chuẩn đoán</h4>
+    <p-table [value]="item.details" [responsive]="true" [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Chuẩn đoán</th>
+                <th>Điều trị</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td>{{row.diagnostic}}</td>
+                <td>{{row.treatment}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td class="text-center" colspan="3">
+                    Không tìm thấy kết quả!
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <hr>
+    <h4>Toa đơn thuốc</h4>
+    <p-table [value]="item.prescriptions" [responsive]="true" [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Thông tin thuốc</th>
+                <th>Thông tin đơn vị</th>
+                <th>Tổng cộng</th>
+                <th>Một lần uống</th>
+                <th>Sáng</th>
+                <th>Chiều</th>
+                <th>Tối</th>
+                <th>Ghi chú</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td>Tên thuốc: {{row.name}} <br> Tên phụ thuốc: {{row.subname}}</td>
+                <td>Đơn vị: {{row.quantity}} <br> Đơn vị uống: {{row.availableQuantity}}</td>
+                <td>{{row.total}}</td>
+                <td>{{row.take}}</td>
+                <td>{{row.isMorning}}</td>
+                <td>{{row.isAfternoon}}</td>
+                <td>{{row.isEvening}}</td>
+                <td>{{row.note}}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td class="text-center" colspan="9">
+                    Không tìm thấy kết quả!
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>

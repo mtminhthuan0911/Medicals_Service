@@ -1,0 +1,145 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model string
+
+@{
+    var serverPath = Configuration.GetValue<string>("ServerPath");
+    var medicalService = ViewBag.MedicalService as MedicalServiceViewModel;
+    var medicalServiceFileUrl = medicalService.Attachments != null && medicalService.Attachments.Count() > 0 ? serverPath + medicalService.Attachments.FirstOrDefault().FilePath : "/asset/images/image_1.jpg";
+    var paymentMethods = ViewBag.PaymentMethods as IEnumerable<PaymentMethodViewModel>;
+}
+
+<section class="hero-wrap hero-wrap-2" style="background-image: url('/asset/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <a asp-controller="DatLichHen"asp-action="Index"><span class="mr-2">Đặt Lịch Hẹn <i class="fa fa-chevron-right"></i></span></a>  <span class="mr-2">Thanh Toán <i class="fa fa-chevron-right"></i></span></p>
+                <h1 class="mb-3 bread">Thanh Toán</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <section class="section-card">
+                    <div class="img-thumb wow fadeInLeft" data-wow-delay="0.3s">
+                        <div class="card">
+                            <img src="@medicalServiceFileUrl" alt="Denim Jeans" style="width:100%">
+                            <h3 style="text-align: center;"><b><i class="fas fa-briefcase-medical"></i>@medicalService.Title</b></h3>
+                            <h4 style="text-align: center;"><i><i class="fas fa-coins"></i> @string.Format("{0:n0} đ", medicalService.Cost) </i></h4>
+                            <section>
+                                <center>
+                                    <a asp-controller="DatHenKham" asp-action="ChonPhongKham" asp-route-medicalServiceId="@medicalService.Id" class="btn-login">
+                                        <span><i class="fas fa-undo-alt"></i> Trở Về</span>
+                                    </a>
+                                    <a asp-controller="DichVu" asp-action="Index" class="btn-login">
+                                        <span><i class="fas fa-briefcase-medical"></i> Dịch Vụ</span>
+                                    </a>
+                                </center>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="profile-wrapper wow fadeInRight" data-wow-delay="0.3s">
+                    <div class="progress" style="height: 15px;">
+                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <ul class="container">
+                        <i class="far fa-address-card" style="color: royalblue;">  Điền Thông Tin</i>
+                        <i class="far fa-address-card" style="padding-left: 50px;color: royalblue;"><b>  Chọn phòng khám </b> </i>
+                        <i class="far fa-address-card" style="padding-left: 50px;color: royalblue;">  Thanh Toán </i>
+                    </ul>
+
+                </div>
+                <section class="ftco-section1 ftco-no-pt ftco-no-pb ftco-services-2 bg-light">
+                    <div class="row">
+                        <div class="col-75">
+                            <div class="containerck">
+                                <form asp-controller="DatLichHen" asp-action="Checkout" method="post">
+                                    <div class="row">
+                                        <div class="col-50">
+                                            <h4><b> Thông tin Thanh Toán </b></h4>
+                                            <label for="fname"><i class="fa fa-user"></i> Tên Đầy Đủ</label>
+                                            <input type="text" id="fname" name="firstname" placeholder="Võ Minh Thuận">
+                                            <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                                            <input type="text" id="email" name="email" placeholder="minhthuan9090@gmail.com">
+                                            <label for="adr"><i class="fa fa-address-card-o"></i> Địa Chỉ</label>
+                                            <input type="text" id="adr" name="address" placeholder="367 Điện Biên">
+                                            <label for="city"><i class="fa fa-institution"></i> Thành phố</label>
+                                            <input type="text" id="city" name="city" placeholder="Hồ Chí Minh">
+                                        </div>
+
+                                        <div class="col-50">
+                                            <h3><b>Số Tài Khoản</b></h3>
+                                            <label for="fname">Chấp Nhận Thanh Toán</label>
+                                            <div class="icon-container">
+                                                <img src="/asset/images/momo-upload-api-push-momo-avatar-190131152912.jfif" width="60px" alt="">
+                                                <img src="/asset/images/visa.png" width="60px" alt="">
+                                                <img src="/asset/images/tải xuống.png" width="60px" alt="">
+                                            </div>
+                                            <label for="cname"><i class="far fa-credit-card"></i> Tên Chủ Thẻ</label>
+                                            <input type="text" id="cname" name="cardname" placeholder="Võ Minh Thuận">
+                                            <label for="ccnum"><i class="far fa-credit-card"></i> Số Thẻ</label>
+                                            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                                        </div>
+                                        <section class="ftco-section1 ftco-no-pt ftco-no-pb ftco-services-2 bg-light">
+                                            <h3><b> Phương Thức Thanh Toán </b></h3>
+                                            @foreach (var item in paymentMethods)
+                                            {
+                                                var imgUrl = item.Attachments != null && item.Attachments.Count() > 0 ? serverPath + item.Attachments.FirstOrDefault().FilePath : "~/icon.jpg";
+                                                <label class="container">
+                                                    <img src="@imgUrl" width="60" alt="">
+                                                    @item.Name
+                                                    <input type="radio" name="paymentMethodId" value="@item.Id">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            }
+                                            @*<label class="container">
+                                                <img src="/asset/images/momo-upload-api-push-momo-avatar-190131152912.jfif" width="60px" alt=""> Ví MoMo
+                                                <input type="radio" checked="checked" name="radio">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label class="container">
+                                                <img src="/asset/images/1554401.png" width="60px" alt=""> Thanh Toán Trực Tiếp
+                                                <input type="radio" name="radio">
+                                                <span class="checkmark"></span>
+                                            </label>*@
+                                        </section>
+                                    </div>
+                                    <label>
+
+                                    </label>
+                                    <center>
+                                        <input type="submit" value="Thanh Toán" class="btn-phieuthongtin">
+                                    </center>
+                                </form>
+                            </div>
+                        </div>
+
+                        @*<div class="col-25">
+                            <div class="containerck">
+                                <h4>
+                                    Giỏ
+                                    <span class="price" style="color:black">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        <b>1</b>
+                                    </span>
+                                </h4>
+                                <p><a href="#">Khám Tổng Quát</a> <br><span class="price">1.490.000VNĐ</span></p><br>
+                                <hr>
+                                <p>Tổng Cộng <span class="price" style="color:black"><b>1.490.000VNĐ</b></span></p>
+                            </div>
+                        </div>*@
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

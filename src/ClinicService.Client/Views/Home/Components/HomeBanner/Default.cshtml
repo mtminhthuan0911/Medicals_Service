@@ -1,0 +1,49 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@model WebsiteSectionViewModel
+
+@{
+    string serverPath = Configuration.GetValue<string>("ServerPath");
+}
+
+@if (Model != null)
+{
+    <section class="hero-wrap js-fullheight" style="background-image: url('@serverPath@Model.Attachments.FirstOrDefault().FilePath');"
+             data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true">
+                <div class="col-lg-6 ftco-animate">
+                    <div class="mt-5">
+                        @Html.Raw(Model.Content)
+                        <div class="row">
+                            <button id="myBtn1" class="mybtn1"><i class="fas fa-search"></i> Tra Cứu Triệu Chứng</button>
+                            <div id="myModal1" class="modal1">
+                                <form class="form1 animate1" action="index.html">
+                                    <img src="~/asset/images/doctor.png" alt="Hinhanhflaticon">
+                                    <h3><b> Tra Cứu Triệu Chứng</b></h3>
+                                    <span onclick="document.getElementById('id01').style.display='none'"
+                                          class="close" title="Close Modal1">&times;</span>
+                                    <div class="container align-items-center">
+                                        <input class="input1"
+                                               type="text" id="fname"
+                                               name="firstname"
+                                               placeholder="Nhập triệu Chứng"
+                                               pattern="[a-z]">
+                                        <input class="input1" type="text" id="lname" name="lastname" placeholder="Nhập Số Ngày Mắc Bệnh">
+                                        <input class="input1" type="submit" value="Tra Cứu">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    @await Html.PartialAsync("~/Views/Shared/_NotFound.cshtml")
+}

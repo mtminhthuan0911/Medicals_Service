@@ -1,0 +1,83 @@
+<h2 class="text-muted">LỊCH TÁI KHÁM <small>Danh sách</small></h2>
+<p-panel #pnlReappointments>
+    <p-header>
+        <div class="row">
+            <div class="col">
+                <button appPermission appFunction="ADMINISTRATION_REAPPOINTMENT" appAction="CREATE" pButton
+                    type="button" icon="pi pi-plus" label="Thêm" class="mr-2" (click)="onShowAddedModal()"></button>
+                <button appPermission appFunction="ADMINISTRATION_REAPPOINTMENT" appAction="UPDATE" pButton
+                    type="button" icon="pi pi-pencil" label="Sửa" class="ui-button-warning mr-2"
+                    (click)="onShowEditedModal()"></button>
+                <button appPermission appFunction="ADMINISTRATION_REAPPOINTMENT" appAction="DELETE" pButton
+                    type="button" icon="pi pi-trash" label="Xoá" class="ui-button-danger"
+                    (click)="onConfirmDelete()"></button>
+            </div>
+            <div class="col">
+                <input type="text" pInputText placeholder="Tìm kiếm..." (keyup.enter)="loadData()" [(ngModel)]="q"
+                    class="w-100">
+            </div>
+        </div>
+    </p-header>
+    <p-table [value]="items" selectionMode="single" [(selection)]="selectedItem" [responsive]="true"
+        [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 64px;" class="text-center">
+                    Chọn
+                </th>
+                <th>Bệnh nhân</th>
+                <th>Ngày tái khám</th>
+                <th>Từ mã phiếu kết quả</th>
+                <th>Tình trạng phiếu</th>
+                <th>..::..</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr [pSelectableRow]="row">
+                <td style="width: 64px;" class="text-center">
+                    <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                </td>
+                <td>{{row.patientFullName}}</td>
+                <td>{{row.reappointmentDate | date: 'dd/MM/yyyy hh:mm'}}</td>
+                <td>{{row.fromMedicalExaminationId}}</td>
+                <td>{{row.statusCategoryName}}</td>
+                <td>
+                    <button appPermission appFunction="ADMINISTRATION_REAPPOINTMENT" appAction="UPDATE" pButton
+                        type="button" icon="pi pi-refresh" class="ui-button-danger mr-2" pTooltip="Thay đổi tình trạng"
+                        tooltipPosition="top" (click)="onShowChangeStatusModal(row.id)"></button>
+
+                    <button *ngIf="row.statusCategoryId !== statusIdCompleted" appPermission
+                        appFunction="ADMINISTRATION_MEDICAL_EXAMINATION" appAction="CREATE" pButton type="button"
+                        icon="pi pi-plus" class="ui-button-warning" pTooltip="Soạn kết quả" tooltipPosition="top"
+                        (click)="goToMedicalExamination(row.id, row.patientId)"></button>
+
+                    <button *ngIf="row.statusCategoryId === statusIdCompleted" appPermission
+                        appFunction="ADMINISTRATION_MEDICAL_EXAMINATION" appAction="UPDATE" pButton type="button"
+                        icon="pi pi-pencil" class="ui-button-warning" pTooltip="Chỉnh sửa kết quả" tooltipPosition="top"
+                        (click)="goToEditMedicalExamination(row.id)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <p>
+                Tổng số bản ghi: {{totalRecords | number}}
+            </p>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td class="text-center">
+                    Không tìm thấy kết quả!
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-footer>
+        <p-paginator [rows]="limit" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10,50,100]"
+            (onPageChange)="onPageChanged($event)"></p-paginator>
+        <p-blockUI [blocked]="blockedPanel" [target]="pnlReappointments">
+            <p-progressSpinner
+                [style]="{'position':'absolute','left':'50%','top':'50%','transform':'translate(-50%,-50%)'}">
+            </p-progressSpinner>
+        </p-blockUI>
+    </p-footer>
+</p-panel>

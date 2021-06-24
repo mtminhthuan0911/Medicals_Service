@@ -1,0 +1,61 @@
+<nav class="sidebar">
+    <div class="list-group">
+        <ng-container *ngFor="let item of functions; let i = index">
+            <a [routerLinkActive]="['router-link-active']" class="list-group-item" [routerLink]="item.url"
+                *ngIf="item.children.length === 0">
+                <i class="fa {{item.icon}}"></i>&nbsp;
+                <span>{{ item.name }}</span>
+            </a>
+
+            <div class="nested-menu" *ngIf="item.children.length !== 0">
+                <a (click)="addExpandClass(item.id); isToggle[i] = !isToggle[i]" class="list-group-item">
+                    <i class="fa {{item.icon}}"></i>&nbsp;
+                    <span>{{ item.name }}</span>
+                    <i class="pi float-right" [ngClass]="isToggle[i] ? 'pi-angle-up' : 'pi-angle-down'"></i>
+                </a>
+                <li [class.expand]="showMenu === item.id" class="nested">
+                    <ul class="submenu">
+                        <li *ngFor="let subItem of item.children">
+                            <a [routerLinkActive]="['router-link-active']" [routerLink]="subItem.url">
+                                <i class="fa {{subItem.icon}}"></i>&nbsp;
+                                <span>{{ subItem.name }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </ng-container>
+
+        <div class="header-fields">
+            <div class="nested-menu">
+                <a (click)="addExpandClass('profile')" class="list-group-item">
+                    <span><i class="fa fa-user"></i>&nbsp; John Smith</span>
+                </a>
+                <li [class.expand]="showMenu === 'profile'" class="nested">
+                    <ul class="submenu">
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span><i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <span><i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a (click)="onLoggedout()" [routerLink]="['/login']">
+                                <span><i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </div>
+        </div>
+    </div>
+</nav>

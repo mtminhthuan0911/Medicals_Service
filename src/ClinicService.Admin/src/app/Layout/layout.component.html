@@ -1,0 +1,8 @@
+<app-header></app-header>
+<app-sidebar (collapsedEvent)="receiveCollapsed($event)"></app-sidebar>
+<section [ngClass]="{ collapsed: collapedSideBar }" class="main-container">
+    <router-outlet></router-outlet>
+</section>
+<p-toast position="bottom-right"></p-toast>
+<p-confirmDialog header="Thông báo" acceptLabel="Chấp nhận" rejectLabel="Huỷ bỏ"
+    acceptButtonStyleClass="ui-button-success" rejectButtonStyleClass="ui-button-secondary"></p-confirmDialog>
